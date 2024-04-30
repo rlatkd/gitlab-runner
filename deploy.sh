@@ -3,9 +3,9 @@ cd $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 
-CURRENT_PID=$(pgrep -f demo)
+CURRENT_PID=$(pgrep -f server-0.0.1-SNAPSHOT.jar)
 
-echo "$CURRENT_PID"
+echo "> CURRENT_PID: $CURRENT_PID"
 
 if [ -z $CURRENT_PID ]; then
         echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다."
@@ -21,4 +21,4 @@ JAR_NAME=$(ls $REPOSITORY/ | grep 'demo' | tail -n 1)
 
 echo "> JAR_NAME: $JAR_NAME"
 
-nohup java -jar $REPOSITORY/$JAR_NAME &>/dev/null &
+nohup java -jar $REPOSITORY/$JAR_NAME/server-0.0.1-SNAPSHOT.jar &>/dev/null &
