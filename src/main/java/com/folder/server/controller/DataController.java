@@ -17,7 +17,7 @@ public class DataController {
 	
 	@GetMapping("/")
 	public String home() {
-		return "[/] 김상훈 test vwow";
+		return "[/] 김상훈 test v";
 	}
 	
 	@GetMapping("/api")
