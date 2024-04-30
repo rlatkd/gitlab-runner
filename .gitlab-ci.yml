@@ -1,14 +1,14 @@
 image: java:8-jdk
 
-stages:
+stages: # List of stages for jobs, and their order of execution
     - build
     - test
     - deploy
 
 cache:
     paths:
-        - ./gradle/wrapper
-        - ./gradle/caches
+        - .gradle/wrapper
+        - .gradle/caches
 
 build:
     stage: build
@@ -29,16 +29,16 @@ deploy-to-ec2:
     before_script:
         - "command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )"
         - eval $(ssh-agent -s)
-        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
         - mkdir -p ~/.ssh
         - chmod 700 ~/.ssh
         - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
         - chmod 644 ~/.ssh/known_hosts
 
     script:
-        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -f ~/app/build/*.jar'
-        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/app/build'
-        - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/app/build/demo.jar
-        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/deploy.sh'
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -f ~/test-springboot-server/build/libs/*.jar'
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/test-springboot-server/build/libs'
+        - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/test-springboot-server/build/libs/*.jar
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/test-springboot-server/test-cd.sh'
     only:
         - main
