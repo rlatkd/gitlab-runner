@@ -38,7 +38,7 @@ deploy-to-ec2:
         - chmod 644 ~/.ssh/known_hosts
 
     script:
-        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -f ~/test-springboot-server/build/libs/*.jar'
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -rf ~/test-springboot-server/build/libs/*'
         - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/test-springboot-server/build/libs'
         - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/test-springboot-server/build/libs/*.jar
         - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/test-springboot-server/test-cd.sh'
