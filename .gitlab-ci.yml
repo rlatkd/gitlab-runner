@@ -26,7 +26,7 @@ test:
     stage: test
     script: ./gradlew test
 
-deploy-to-ec2:
+deploy:
     stage: deploy
     before_script:
         - "command -v ssh-agent >/dev/null || ( apk update && apk add openssh )"
