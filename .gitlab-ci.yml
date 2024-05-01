@@ -1,6 +1,6 @@
 image: gradle:8.7-jdk17-alpine
 
-stages: # List of stages for jobs, and their order of execution
+stages:
     - build
     - test
     - deploy
