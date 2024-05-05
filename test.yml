@@ -1,0 +1,53 @@
+image: gradle:8.7-jdk17-alpine
+
+stages:
+    - build
+    - test
+    - deploy
+
+cache:
+    paths:
+        - .gradle/wrapper
+        - .gradle/caches
+
+build:
+    stage: build
+    script:
+        - git update-index --add --chmod=+x gradlew
+        - ./gradlew clean build
+    artifacts:
+        paths:
+            - build/libs/*.jar
+        expire_in: 1 week
+    only:
+        - main
+
+test:
+    stage: test
+    script: ./gradlew test
+
+deploy:
+    stage: deploy
+    before_script:
+        - "command -v ssh-agent >/dev/null || ( apk update && apk add openssh )"
+        - eval $(ssh-agent -s)
+        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
+
+    # script:
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'rm -rf ~/app/build/*.jar'
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'mkdir -p ~/app/build'
+    #     - scp build/libs/*.jar ubuntu@"rlatkdsALB-1816408618.ap-northeast-2.elb.amazonaws.com":~/app/build/demo.jar
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" '~/deploy.sh'
+
+    script:
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -rf ~/app/build/*.jar'
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/app/build'
+        - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/app/build/demo.jar
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/deploy.sh'
+
+    only:
+        - main
