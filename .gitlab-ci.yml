@@ -37,17 +37,17 @@ deploy:
         - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
         - chmod 644 ~/.ssh/known_hosts
 
-    script:
-        - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'rm -rf ~/app/build/*.jar'
-        - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'mkdir -p ~/app/build'
-        - scp build/libs/*.jar ubuntu@"rlatkdsALB-1816408618.ap-northeast-2.elb.amazonaws.com":~/app/build/demo.jar
-        - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" '~/deploy.sh'
-
     # script:
-    #     - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -rf ~/app/build/*.jar'
-    #     - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/app/build'
-    #     - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/app/build/demo.jar
-    #     - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/deploy.sh'
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'rm -rf ~/app/build/*.jar'
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" 'mkdir -p ~/app/build'
+    #     - scp build/libs/*.jar ubuntu@"rlatkdsALB-1816408618.ap-northeast-2.elb.amazonaws.com":~/app/build/demo.jar
+    #     - ssh -o StrictHostKeyChecking=no ubuntu@"rlatkdALB-1816408618.ap-northeast-2.elb.amazonaws.com" '~/deploy.sh'
+
+    script:
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'rm -rf ~/app/build/*.jar'
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" 'mkdir -p ~/app/build'
+        - scp build/libs/*.jar ubuntu@"$DEPLOY_SERVER":~/app/build/demo.jar
+        - ssh -o StrictHostKeyChecking=no ubuntu@"$DEPLOY_SERVER" '~/deploy.sh'
 
     only:
         - main
