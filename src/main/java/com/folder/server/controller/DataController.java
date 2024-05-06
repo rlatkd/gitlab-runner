@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.UUID;
 
 import com.folder.server.dto.ResultDto;
 import com.folder.server.service.UserService;
@@ -17,7 +18,8 @@ public class DataController {
 	
 	@GetMapping("/")
 	public String home() {
-		return "[/] 김상훈 test v2";
+		UUID uuid = UUID.randomUUID();
+		return uuid.toString() + " | [/] 김상훈 test v2";
 	}
 	
 	@GetMapping("/api")
