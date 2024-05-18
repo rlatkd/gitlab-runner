@@ -1,4 +1,4 @@
-# GitLab Runners를 이용한 CI/CD로 SpringBoot EC2에 자동배포
+# GitLab Runner를 이용한 CI/CD로 SpringBoot EC2에 자동배포
 
 ## 목표
 
